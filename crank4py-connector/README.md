@@ -15,7 +15,7 @@ Usage
 ---
 
 - There are mainly 4 steps:
-  1. `pip install crank4py_connector`
+  1. `pip install crank4py-connector`
   2. create a web service that hosts al requests on some path prefix, e.g. `/service-a/...`
   3. start a web service on a random port 
   4. construct a `Config` object and start a connector 
