@@ -1,7 +1,7 @@
 crank4y-connector
 -----
 
-1. A python library that allows you to register python web service to one or more `API GATEWAY` [cranker routers](https://github.com/torchcc/crank4go-core)
+1. A python library that allows you to register python web service to one or more `API GATEWAY` [cranker routers](https://github.com/torchcc/crank4go)
 2. it is the client endpoint of a `API GATEWAY` 
 
 ### Dependencies:
