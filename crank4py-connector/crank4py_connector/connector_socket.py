@@ -304,11 +304,11 @@ class ConnectorSocket(WebSocketApp):
             if result.is_succeeded:
                 self.req_complete = True
                 log.debug("closing websocet because response is fully processed")
-                self.close(status=STATUS_NORMAL, reason="Proxy complete")
+                self.close(status=STATUS_NORMAL, reason=b"Proxy complete")
             else:
                 self.req_complete = False
                 if self.sock:
-                    self.close(status=STATUS_UNEXPECTED_CONDITION, reason="Proxy failure")
+                    self.close(status=STATUS_UNEXPECTED_CONDITION, reason=b"Proxy failure")
 
         log.debug("request headers received")
         self.req_to_target.fire_req_from_connector_to_target_service(callabck)
