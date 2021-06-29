@@ -1,4 +1,4 @@
 six
-websocket-client==0.57.0
+websocket-client==1.1.0
 yarl
 requests

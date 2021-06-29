@@ -20,7 +20,7 @@ setuptools.setup(
     description="A python library that allows web services to be registered to one or more cranker routers(Api gateway)",
     long_description=long_description,
     install_requires=[
-        "websocket-client==0.57.0",
+        "websocket-client==1.1.0",
         "requests",
         "yarl",
     ],

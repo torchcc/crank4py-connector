@@ -65,6 +65,7 @@ class ConnectorSocket(WebSocketApp):
 
     def run_forever(self, sockopt=None, sslopt=None,
                     ping_interval=0, ping_timeout=None,
+                    ping_payload="",
                     http_proxy_host=None, http_proxy_port=None,
                     http_no_proxy=None, http_proxy_auth=None,
                     skip_utf8_validation=True,
@@ -152,7 +153,7 @@ class ConnectorSocket(WebSocketApp):
             if ping_interval:
                 event = threading.Event()
                 thread = threading.Thread(
-                    target=self._send_ping, args=(ping_interval, event))
+                    target=self._send_ping, args=(ping_interval, event, ping_payload))
                 thread.setDaemon(True)
                 thread.start()
 
@@ -223,14 +224,17 @@ class ConnectorSocket(WebSocketApp):
 
             self._thread_pool.submit(delay_task)
 
-    def on_websocket_connect(self) -> NoReturn:
+    @staticmethod
+    def on_websocket_connect(self, *args) -> NoReturn:
         """on open"""
         log.debug(f"connected to {self.sock.sock.getpeername()}, sockeId={self.sock.sock_id}")
 
+    @staticmethod
     def on_websocket_error(self, err: Exception) -> NoReturn:
         log.warning(f"websocket error: {err}", exc_info=True)
         self.reconnect_to_ws_server()
 
+    @staticmethod
     def on_websocket_close(self, code: int, reason: str) -> NoReturn:
         log.debug(f"connection {self.sock_id} closed: {code} - {reason}")
         if not self.new_sock_added:
@@ -244,6 +248,7 @@ class ConnectorSocket(WebSocketApp):
                          f"closed therire browser, Going to cancel request to target {self.req_to_target.url}")
                 self.req_to_target.abort(Exception("Socket to Router closed"))
 
+    @staticmethod
     def on_message(self, msg: Union[str, bytes]) -> NoReturn:
         if isinstance(msg, str):
             self.on_websocket_text(msg)
