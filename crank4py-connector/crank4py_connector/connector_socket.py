@@ -30,7 +30,8 @@ class WebSocket(WebSocket_):
         local_addr = self.sock.getsockname()
         remote_addr = self.sock.getpeername()
         self.ping_count += 1
-        ping_str = f"send ping from {local_addr} to {remote_addr} and sockId={self.sock_id} countTime={self.ping_count}"
+        # it is a must to make ping_str to be bytes, or else there will be bug.
+        ping_str = bytes(f"send ping from {local_addr} to {remote_addr} and sockId={self.sock_id} countTime={self.ping_count}", encoding="utf-8")
         super().ping(ping_str)
 
 
