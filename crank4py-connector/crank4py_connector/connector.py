@@ -34,7 +34,6 @@ class Connector(object):
         self._connector_instance_id = connector_instance_id
         self._ws_client_farm = WebsocketClientFarm(sliding_window_size)
         self._component_name = component_name
-        self._thread_pool = ThreadPoolExecutor(6)
         self._state = State.NOT_STARTED
 
     def start(self) -> NoReturn:
@@ -56,7 +55,7 @@ class Connector(object):
             "CrankerProtocol": CrankerProtocolVersion10,
             "Route": self._target_service_name
         }
-        sock = ConnectorSocket(self._thread_pool, register_uri, self._target_uri, conn_info,
+        sock = ConnectorSocket(register_uri, self._target_uri, conn_info,
                                self._ws_client_farm, self._component_name, headers=upgrade_req_headers)
 
         def runnable():
@@ -77,7 +76,7 @@ class Connector(object):
         sock.when_consumed(runnable)
         if self._state != State.SHUTDOWN:
             conn_info.on_conn_starting()
-            self._thread_pool.submit(sock.run_forever, sslopt={"cert_reqs": ssl.CERT_NONE}, ping_interval=5)
+            sock.thread_pool.submit(sock.run_forever, sslopt={"cert_reqs": ssl.CERT_NONE}, ping_interval=5)
         log.debug(f"connected to router, register url = {register_uri}")
 
     def shutdown(self) -> NoReturn:

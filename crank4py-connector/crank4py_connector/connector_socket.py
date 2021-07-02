@@ -38,7 +38,7 @@ class WebSocket(WebSocket_):
 class ConnectorSocket(WebSocketApp):
     _http_client: ClassVar[HttpClient] = create_http_client()
 
-    def __init__(self, thread_pool: ThreadPoolExecutor, src_uri: URL, target_uri: URL, conn_info: ConnInfo,
+    def __init__(self, src_uri: URL, target_uri: URL, conn_info: ConnInfo,
                  ws_clien_farm: WebsocketClientFarm, component_name: str, **kwargs):
         self.register_uri: URL = src_uri
         self.target_uri: URL = target_uri
@@ -53,7 +53,7 @@ class ConnectorSocket(WebSocketApp):
         self.new_sock_added: bool = False
         self.new_sock_added: bool = False
         self.when_consumed_action: Optional[Callable] = None
-        self._thread_pool: ThreadPoolExecutor = thread_pool
+        self.thread_pool = ThreadPoolExecutor(max_workers=2)
 
         super().__init__(
             url=str(self.register_uri),
@@ -222,8 +222,7 @@ class ConnectorSocket(WebSocketApp):
                 time.sleep(delay / 1000)
                 self.when_consumed_action()
                 self.new_sock_added = True
-
-            self._thread_pool.submit(delay_task)
+            self.thread_pool.submit(delay_task)
 
     @staticmethod
     def on_websocket_connect(self, *args) -> NoReturn:

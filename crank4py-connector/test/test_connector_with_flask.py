@@ -13,8 +13,21 @@ def start_flask_and_connector():
     from crank4py_connector import Config
     from crank4py_connector import create_and_start_connector
 
-    router_uris = ["wss://localhost:9070", "wss://localhost:9070"]
-    my_service_uri = "http://localhost:5000"
+    router_uris = [
+        "wss://localhost:9070",
+        "wss://localhost:9070",
+        "wss://localhost:9070",
+        "wss://localhost:9070",
+        "wss://localhost:9070",
+        "wss://localhost:9070",
+        "wss://localhost:9070",
+        # "wss://localhost:8070",
+        # "wss://localhost:7070",
+        # "wss://localhost:6070",
+        # "wss://localhost:5070",
+        # "wss://localhost:4070"
+    ]
+    my_service_uri = "http://localhost:5020"
     config = Config(my_service_uri, "service-a", router_uris, component_name="service-a-component")
     connector = create_and_start_connector(config)
 
@@ -48,7 +61,7 @@ def start_flask_and_connector():
         </form>
         '''
 
-    app.run(host="localhost", port=5000)
+    app.run(host="localhost", port=5020)
 
 if __name__ == '__main__':
     start_flask_and_connector()
