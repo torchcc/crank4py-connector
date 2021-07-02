@@ -9,7 +9,7 @@ crank4y-connector
 2. numpy(optional, for better performance)
 3. requests
 4. yarl
-5. websocket-client == 0.57.0 (pls use this version, do not try higher version, trust me, there are bugs in higher versions)
+5. websocket-client == 1.1.0 
 
 Usage
 ---
@@ -27,7 +27,8 @@ from flask import Flask
 from crank4py_connector import Config
 from crank4py_connector import create_and_start_connector
 
-router_uris = ["wss://localhost:9070", "wss://localhost:9070"]
+# suppose the contextpath of your py service is `service-a`
+router_uris = ["wss://localhost:9070", "wss://localhost:9070"]  # the api gateway router instances which you want to register to
 my_service_uri = "http://localhost:5000"  
 config = Config(my_service_uri, "service-a", router_uris, component_name="service-a-component")
 connector = create_and_start_connector(config)
@@ -36,7 +37,7 @@ app = Flask(__name__, static_url_path="")
 @app.route("/service-a/hello")
 def hello():
     return "hello"
-app.run(host="localhost", port=5000)
+app.run(host="localhost", port=5000) # port can be any random ephermeral port
 
 # or you can refer to crank4py_connector
 # and then you can query your api gateway to access your server-a. e.g. if your router listens on https://localhost:9000, then you can access  https://localhost:9000/service-a/hello,
